@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Free App Audit — Platformance</title>
+<title>Free App Audit — AppMonitor</title>
 <link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin/>
 <link href="https://fonts.cdnfonts.com/css/gilroy-bold" rel="stylesheet"/>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
@@ -173,17 +173,50 @@ svg { display: block; }
 .chip:hover { background: rgba(255,255,255,.24); }
 
 /* ===== HOW IT WORKS ===== */
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 40px 0 8px; }
-@media (max-width: 600px) { .steps { grid-template-columns: 1fr; } }
-.step { text-align: center; }
-.step-num {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: var(--primary-soft); color: var(--primary);
-  font-size: 16px; font-weight: 900;
-  display: grid; place-items: center; margin: 0 auto 12px;
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 44px 0 8px; position: relative; }
+@media (max-width: 600px) { .steps { grid-template-columns: 1fr; gap: 28px; } }
+.step { text-align: center; opacity: 0; transform: translateY(18px); animation: stepIn .6s cubic-bezier(.22,.61,.36,1) forwards; animation-delay: var(--d, 0s); }
+@media (prefers-reduced-motion: reduce) { .step { opacity: 1; transform: none; animation: none; } .step-art * { animation: none !important; } }
+@keyframes stepIn { to { opacity: 1; transform: translateY(0); } }
+.step-art {
+  position: relative; width: 100%; max-width: 156px; height: 100px;
+  margin: 0 auto 16px; border-radius: 16px;
+  display: grid; place-items: center; overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s, border-color .28s;
+}
+.step:hover .step-art { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--border-strong); }
+.step-art svg { width: 100%; height: 100%; display: block; }
+.art-1 { background: linear-gradient(160deg, #EEF1FE 0%, #E0E6FB 100%); }
+.art-2 { background: linear-gradient(160deg, #FEF4E6 0%, #FCE9CC 100%); }
+.art-3 { background: linear-gradient(160deg, #E7F7EF 0%, #D2F0E0 100%); }
+[data-theme="dark"] .art-1 { background: linear-gradient(160deg, #1b1f44 0%, #232a5e 100%); }
+[data-theme="dark"] .art-2 { background: linear-gradient(160deg, #3a2c12 0%, #4a3a18 100%); }
+[data-theme="dark"] .art-3 { background: linear-gradient(160deg, #12362a 0%, #184a38 100%); }
+.step-chip {
+  position: absolute; top: 9px; left: 9px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--surface); color: var(--primary);
+  font-size: 11.5px; font-weight: 900;
+  display: grid; place-items: center; box-shadow: var(--shadow); z-index: 3;
 }
 .step-title { font-size: 14px; font-weight: 800; margin-bottom: 5px; }
 .step-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+/* step illustration micro-animations */
+@keyframes magPulse { 0%,100% { transform: translate(0,0); } 50% { transform: translate(2px,-2px); } }
+@keyframes caretBlink { 0%,45% { opacity: 1; } 55%,100% { opacity: 0; } }
+@keyframes tilepop { 0%,18% { opacity: 0; transform: translateY(5px); } 32%,86% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(5px); } }
+@keyframes barGrow { 0% { transform: scaleY(.12); } 55%,100% { transform: scaleY(1); } }
+@keyframes trendDraw { 0% { stroke-dashoffset: 120; } 60%,100% { stroke-dashoffset: 0; } }
+@keyframes dotRise { 0%,50% { opacity: 0; transform: translateY(6px); } 70%,100% { opacity: 1; transform: translateY(0); } }
+@keyframes sparkle { 0%,60%,100% { opacity: 0; transform: scale(.4); } 78% { opacity: 1; transform: scale(1); } }
+.a-mag { animation: magPulse 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.a-caret { animation: caretBlink 1.1s steps(1) infinite; }
+.a-tile { animation: tilepop 3.4s ease-in-out infinite; transform-box: fill-box; }
+.a-bar { transform-box: fill-box; transform-origin: bottom; animation: barGrow 2.8s cubic-bezier(.22,.61,.36,1) infinite; }
+.a-trend { stroke-dasharray: 120; animation: trendDraw 3s ease-in-out infinite; }
+.a-dot { transform-box: fill-box; animation: dotRise 3s ease-in-out infinite; }
+.a-spark { transform-box: fill-box; transform-origin: center; animation: sparkle 3s ease-in-out infinite; }
 
 /* ===== PAGE SECTIONS ===== */
 .section-head { padding: 36px 0 20px; }
@@ -403,10 +436,10 @@ svg { display: block; }
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="brand">
-    <span class="brand-p">Platform</span>ance
+    <span class="brand-p">App</span>Monitor
   </div>
   <div class="topbar-actions">
-    <a class="fix-btn primary" href="mailto:hello@platformance.io" style="padding:8px 18px;font-size:13px">Book a Free Call</a>
+    <a class="fix-btn primary" href="mailto:hello@appmonitor.io" style="padding:8px 18px;font-size:13px">Book a Free Call</a>
     <button class="icon-btn" id="themeToggle" title="Toggle theme"><i data-lucide="moon"></i></button>
   </div>
 </header>
@@ -552,29 +585,24 @@ function catFallback(id) {
   return { id, name: c.name, developer: c.developer, icon: '', rating: null, ratingCount: null, vertical: c.vertical };
 }
 
-async function searchItunes(q) {
-  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=ae&entity=software&limit=12`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return (data.results || []).map(r => ({
-    id: String(r.trackId),
-    name: r.trackName,
-    developer: r.artistName,
-    icon: r.artworkUrl100,
-    rating: r.averageUserRating ? Math.round(r.averageUserRating * 10) / 10 : null,
-    ratingCount: r.userRatingCount || null,
-    vertical: guessVertical(r),
-  }));
+async function fetchJSON(url, retries = 2) {
+  let lastErr;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return await res.json();
+    } catch (e) {
+      lastErr = e;
+      if (attempt < retries) await new Promise(r => setTimeout(r, 350 * (attempt + 1)));
+    }
+  }
+  throw lastErr;
 }
 
-async function lookupItunes(id) {
-  const url = `https://itunes.apple.com/lookup?id=${id}&country=ae`;
-  const res = await fetch(url);
-  const data = await res.json();
-  if (!data.results || !data.results[0]) throw new Error('not found');
-  const r = data.results[0];
-  const app = {
-    id: String(r.trackId || id),
+function appFromResult(r) {
+  return {
+    id: String(r.trackId),
     name: r.trackName,
     developer: r.artistName,
     icon: r.artworkUrl100,
@@ -584,6 +612,25 @@ async function lookupItunes(id) {
     description: r.description || '',
     primaryGenre: r.primaryGenreName || '',
   };
+}
+
+async function searchItunes(q) {
+  const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&country=ae&entity=software&limit=12`;
+  const data = await fetchJSON(url);
+  return (data.results || []).filter(r => r.trackId).map(r => {
+    const app = appFromResult(r);
+    STATE.appCache[app.id] = app;
+    return app;
+  });
+}
+
+async function lookupItunes(id) {
+  const url = `https://itunes.apple.com/lookup?id=${id}&country=ae`;
+  const data = await fetchJSON(url);
+  if (!data.results || !data.results[0]) throw new Error('not found');
+  const app = appFromResult(data.results[0]);
+  app.id = String(data.results[0].trackId || id);
+  STATE.appCache[app.id] = app;
   STATE.appCache[id] = app;
   return app;
 }
@@ -593,18 +640,17 @@ function guessVertical(r) {
   if (match) return match.vertical;
   const g = (r.primaryGenreName || r.genres?.[0] || '').toLowerCase();
   if (g.includes('finance') || g.includes('banking')) return 'banking';
-  if (g.includes('travel')) return 'travel';
-  if (g.includes('food')) return 'fnb';
+  if (g.includes('travel') || g.includes('navigation')) return 'travel';
+  if (g.includes('food') || g.includes('drink')) return 'fnb';
   if (g.includes('shopping')) return 'ecommerce';
-  if (g.includes('health') || g.includes('medical')) return 'healthcare';
-  if (g.includes('entertainment') || g.includes('music')) return 'entertainment';
-  return 'fintech';
+  if (g.includes('health') || g.includes('medical') || g.includes('fitness')) return 'healthcare';
+  if (g.includes('entertainment') || g.includes('music') || g.includes('photo') || g.includes('video') || g.includes('game') || g.includes('social') || g.includes('book')) return 'entertainment';
+  return 'entertainment';
 }
 
 async function fetchReviews(id) {
   const url = `https://itunes.apple.com/ae/rss/customerreviews/id=${id}/sortBy=mostRecent/json`;
-  const res = await fetch(url);
-  const data = await res.json();
+  const data = await fetchJSON(url);
   const entries = data.feed?.entry || [];
   const list = entries.filter(e => e['im:rating']).map(e => ({
     title: e.title?.label || '',
@@ -698,12 +744,12 @@ function fixCtaHTML(appName) {
   return `<div class="fix-cta">
     <div class="fix-cta-badge"><i data-lucide="zap"></i> Paid ASO Service</div>
     <h2>Ready to fix these issues and rank higher?</h2>
-    <p>Platformance specialises in App Store Optimisation, ratings strategy, and user acquisition for UAE apps. Let's turn ${appName ? `${esc(appName)}'s` : "your app's"} frustrations into 5-star growth.</p>
+    <p>AppMonitor specialises in App Store Optimisation, ratings strategy, and user acquisition for UAE apps. Let's turn ${appName ? `${esc(appName)}'s` : "your app's"} frustrations into 5-star growth.</p>
     <div class="fix-btns">
-      <a class="fix-btn primary" href="mailto:hello@platformance.io?subject=App Audit — ${esc(appName||'My App')}">
+      <a class="fix-btn primary" href="mailto:hello@appmonitor.io?subject=App Audit — ${esc(appName||'My App')}">
         <i data-lucide="mail"></i> Talk to Our Team
       </a>
-      <a class="fix-btn outline" href="https://calendly.com/platformance/strategy" target="_blank">
+      <a class="fix-btn outline" href="https://calendly.com/appmonitor/strategy" target="_blank">
         <i data-lucide="calendar"></i> Book a Free Strategy Call
       </a>
     </div>
@@ -763,7 +809,7 @@ function renderHome() {
     <div class="steps">
       <div class="step"><div class="step-num">1</div><div class="step-title">Search your app</div><div class="step-desc">Find any UAE App Store listing by name or keyword.</div></div>
       <div class="step"><div class="step-num">2</div><div class="step-title">See your audit</div><div class="step-desc">Category ranking, competitor position, and top user issues.</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-title">Fix &amp; grow</div><div class="step-desc">Explore how Platformance can move the needle for you.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-title">Fix &amp; grow</div><div class="step-desc">Explore how AppMonitor can move the needle for you.</div></div>
     </div>
   `;
   refreshIcons();
@@ -858,10 +904,11 @@ async function renderAudit(id) {
   `;
   refreshIcons();
 
-  let app = STATE.appCache[id] || catFallback(id);
+  let app = STATE.appCache[id];
   if (!app) { try { app = await lookupItunes(id); } catch {} }
+  if (!app) app = catFallback(id);
   if (!app) {
-    c.innerHTML = `<div class="full-empty"><i data-lucide="alert-circle"></i><h3>App not found</h3><p>The app ID may have changed on the App Store.</p></div>`;
+    c.innerHTML = `<div class="full-empty"><i data-lucide="wifi-off"></i><h3>Couldn't load this app</h3><p>The App Store API didn't respond. This is usually a temporary rate limit.</p><div style="display:flex;gap:8px;margin-top:6px"><button class="btn-ghost" onclick="renderAudit('${esc(id)}')"><i data-lucide="refresh-cw"></i> Try again</button><button class="btn-ghost" onclick="go('#search')"><i data-lucide="search"></i> New search</button></div></div>`;
     refreshIcons(); return;
   }
 
@@ -987,7 +1034,7 @@ async function renderAudit(id) {
     <!-- SECTION 3: CTA -->
     <div id="ctaBox"></div>
 
-    <p style="font-size:11px;color:var(--text-faint);padding:8px 0 24px">* Rankings are simulated for illustration. Live ranking data requires a paid provider (e.g. AppFollow, Sensor Tower). Platformance is not affiliated with Apple or Google.</p>
+    <p style="font-size:11px;color:var(--text-faint);padding:8px 0 24px">* Rankings are simulated for illustration. Live ranking data requires a paid provider (e.g. AppFollow, Sensor Tower). AppMonitor is not affiliated with Apple or Google.</p>
   `;
   refreshIcons();
 
@@ -1079,7 +1126,7 @@ router();
 </script>
 
 <footer class="footer">
-  <p>Powered by <strong>Platformance</strong> · <a href="mailto:hello@platformance.io">hello@platformance.io</a> · Data sourced from public iTunes APIs · Not affiliated with Apple or Google.</p>
+  <p>Powered by <strong>AppMonitor</strong> · <a href="mailto:hello@appmonitor.io">hello@appmonitor.io</a> · Data sourced from public iTunes APIs · Not affiliated with Apple or Google.</p>
 </footer>
 </body>
 </html>
