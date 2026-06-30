@@ -725,7 +725,7 @@ function issueCatsHTML(issues, total) {
       <div class="issue-card-head" data-toggle="${cat.key}">
         <div class="issue-icon" style="background:color-mix(in srgb,${cat.color} 14%,transparent);color:${cat.color}"><i data-lucide="${cat.icon}"></i></div>
         <div class="issue-title">${esc(cat.label)}</div>
-        <div class="issue-badge" style="background:color-mix(in srgb,${cat.color} 11%,transparent);color:${cat.color}">${cat.count}</div>
+        <div class="issue-badge" style="background:color-mix(in srgb,${cat.color} 11%,transparent);color:${cat.color}">${pct}%</div>
         <div class="issue-chevron ${idx===0?'open':''}"><i data-lucide="chevron-down"></i></div>
       </div>
       <div class="issue-body ${idx===0?'open':''}" data-body="${cat.key}">
