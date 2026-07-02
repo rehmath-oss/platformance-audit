@@ -1015,9 +1015,6 @@ async function renderAudit(id) {
     return sum + (other?.rating || 4.2);
   }, 0) / Math.max(catApps.length, 1);
 
-  // Category leaderboard with this app included
-  let lb = buildLeaderboard(id, app, ranks);
-
   const iconEl = app.icon
     ? `<img class="audit-icon" src="${esc(app.icon)}" alt="${esc(app.name)}" onerror="this.outerHTML='<div class=audit-icon-fallback>${v.emoji||'📱'}</div>'">`
     : `<div class="audit-icon-fallback">${v.emoji||'📱'}</div>`;
@@ -1087,10 +1084,6 @@ async function renderAudit(id) {
         </div>
       </div>
 
-      <div class="leaderboard">
-        <div class="lb-head"><span>Rank</span><span>App</span><span style="text-align:right">Rating</span><span style="text-align:right">Reviews</span></div>
-        <div id="lbRows">${leaderboardRowsHTML(lb, v)}</div>
-      </div>
     </div>
 
     <!-- SECTION 2: ISSUES -->
@@ -1121,16 +1114,13 @@ async function renderAudit(id) {
     refreshIcons();
   })();
 
-  // Async: fetch real icons + ratings for every app in the leaderboard, then re-render it
+  // Async: backfill the audited app's own icon if it was missing
   (async () => {
-    try { await lookupManyItunes([...lb.map(a => a.iosId), id]); } catch {}
-    lb = buildLeaderboard(id, app, ranks);
-    const rows = $('#lbRows');
-    if (rows) rows.innerHTML = leaderboardRowsHTML(lb, v);
-    // backfill the header icon if the audited app had none
-    const cached = STATE.appCache[id];
-    if (cached && cached.icon && !app.icon) {
-      app.icon = cached.icon;
+    if (app.icon) return;
+    let fresh = STATE.appCache[id];
+    if (!fresh || !fresh.icon) { try { fresh = await lookupItunes(id); } catch {} }
+    if (fresh && fresh.icon) {
+      app.icon = fresh.icon;
       const ai = $('#auditIcon');
       if (ai) ai.innerHTML = `<img class="audit-icon" src="${esc(app.icon)}" alt="${esc(app.name)}" onerror="this.outerHTML='<div class=audit-icon-fallback>${v.emoji||'📱'}</div>'">`;
     }
